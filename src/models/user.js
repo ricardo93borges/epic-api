@@ -1,8 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-//$2b$08$agZDJo0SjdR8GI42rMiELOzk7tRoJdGqtIgXaKshaIM.sxAtfNijW
-
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         id: {
@@ -34,11 +32,16 @@ module.exports = (sequelize, DataTypes) => {
         hooks: {
             beforeSave: async (user) => {
                 if (user.password) {
-                    user.password = await bcrypt.hash(user.password, 8);
+                    user.password = await bcrypt.hash(user.password, 8)
                 }
             },
         },
     })
+
+
+    User.associate = (models) => {
+        User.hasMany(models.Post)
+    }
 
     User.prototype.checkPassword = function (password) {
         return bcrypt.compare(password, this.password)
