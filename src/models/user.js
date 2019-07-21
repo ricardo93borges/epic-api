@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
 
 
     User.associate = (models) => {
-        User.hasMany(models.Post)
+        User.hasMany(models.Post, {as: 'posts'})
     }
 
     User.prototype.checkPassword = function (password) {
